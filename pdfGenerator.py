@@ -1,6 +1,7 @@
 from fpdf import FPDF
 import pandas
 
+
 # Orientation = P/L = Portrait/Landscape
 # unit = size = mm = millimeter
 # format = paper size = A4 paper
@@ -23,29 +24,29 @@ for idx, data in df.iterrows():
             pdf.set_font(family='Times', style='B', size=24)    #this will applied to everthing below, until a new set_font
             pdf.cell(w=0, h=15, txt=data["Topic"], align='L', ln=1, border=0) #w-width 0:full page width, x>0, will be mm length, h-height, align-Left side, Right side, border-1-shows/0-empty, ln-breakline, number of returns
             pdf.line(10, 25, 200, 25)
-            pdf.ln(246) #mv cursor to the footer
+
+            line = 25 #start from line 25mm (contains a header)
+            for p in range(24):
+                line += 10 #add 100mm
+                pdf.line(10, line, 200, line) #generate a new line
             
-            # pdf.footer()
-            # pdf.set_text_color(100, 100, 100)       #RGB 0-255
-            # pdf.set_font(family='Times', style='B', size=12)    #this will applied to everthing below, until a new set_font
-            # pdf.cell(w=0, h=12, txt=data["Topic"], align='R', ln=1, border=0) #w-width 0:full page width, x>0, will be mm length, h-height, align-Left side, Right side, border-1-shows/0-empty, ln-breakline, number of returns
+            pdf.ln(246) #mv cursor to the footer
+
         else:
             pdf.add_page()
             cnt+=1
+            
+            line = 5    #start from line 5mm
+            for p in range(26):
+                line += 10  # add 10mm
+                pdf.line(10, line, 200, line)   #generate a new line
+            
             pdf.ln(260) #mv cursor to the footer
         
         # on every page, go to the footer and include the Topic
-        
         pdf.set_text_color(180, 180, 180)
         pdf.set_font(family='Times', style='I', size=8)    #this will applied to everthing below, until a new set_font
         pdf.cell(w=0, h=8, txt=f"{data['Topic']}", align='R', ln=1, border=0) #w-width 0:full page width, x>0, will be mm length, h-height, align-Left side, Right side, border-1-shows/0-empty, ln-breakline, number of returns
         pdf.cell(w=0, h=8, txt=f"{cnt}", align='R', ln=1, border=0) #w-width 0:full page width, x>0, will be mm length, h-height, align-Left side, Right side, border-1-shows/0-empty, ln-breakline, number of returns
-
-
-
-
-
-# pdf.set_font(family='Times', size=10)    #this will applied to everthing below, until a new set_font
-# pdf.cell(w=0, h=12, txt='Hi There', align='R', ln=1, border=1)
 
 pdf.output('output.pdf')
